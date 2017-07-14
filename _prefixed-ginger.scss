@@ -1,0 +1,583 @@
+/*
+Modified version of Ginger Grid (https://github.com/erwstout/ginger) by
+Eric Stout
+
+Follows all the same naming conventions as ginger but prefixed with g- to avoid
+conflicts with existing classes in the project.
+
+Based off ginger-grid 2.0.3
+*/
+
+// Settings
+// Adjust any of these variables to your liking, or don't. :-)
+
+// Container Max Width
+$container-max-width: 100% !default;
+
+// Max-width of rows
+$row-max-width: 62.5rem !default;
+
+// Max number of block grids
+$max-block-grid: 12 !default;
+
+// Column Padding
+$col-padding: 0.80rem !default;
+
+// Flex Basis Value
+$flex-basis: auto !default;
+
+// Medium Breakpoint Size
+// ( Use an em or rem value only for offsets to work correctly)
+$medium-breakpoint: 64em !default;
+
+// Small Breakpoint Size
+// ( Use an em or rem value only for offsets to work correctly)
+$small-breakpoint: 47.9375em !default;
+
+// Block Grid
+$block-grid-flex-direction: row !default;
+$block-grid-justify-content: space-between !default;
+$block-grid-align-items: flex-start !default;
+$block-grid-flex-wrap: wrap !default;
+
+@mixin block-grid{
+  display: flex;
+  width: 100%;
+  flex-direction: $block-grid-flex-direction;
+  justify-content: $block-grid-justify-content;
+  align-items: $block-grid-align-items;
+  flex-wrap: $block-grid-flex-wrap;
+}
+
+// Block Grid Alignment Classes
+.g-block-grid {
+  &--justify-content-center {
+    justify-content: center;
+  }
+  &--justify-content-start {
+    justify-content: flex-start;
+  }
+  &--justify-content-space-around {
+    justify-content: space-around;
+  }
+  &--justify-content-end {
+    justify-content: flex-end;
+  }
+}
+
+@for $i from 1 through $max-block-grid {
+  $width: 100% / $i;
+  .g-block-grid-#{$i}{
+    @include block-grid();
+    .g-col{
+      flex-basis: $width;
+    }
+  }
+}
+
+// IE 10/11 Work Around
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  @for $i from 1 through $max-block-grid {
+    $width: 100% / $i;
+    .g-block-grid-#{$i}{
+      @include block-grid();
+      .g-col{
+        width: $width;
+        flex-basis: auto;
+      }
+    }
+  }
+}
+
+// Medium Breakpoint
+@media screen and (max-width: $medium-breakpoint){
+  @for $i from 1 through $max-block-grid {
+    $width: 100% / $i;
+    .g-md-block-grid-#{$i}{
+      @include block-grid();
+      .g-col{
+        flex-basis: $width;
+      }
+    }
+  }
+
+  // IE 10/11 Work Around
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    @for $i from 1 through $max-block-grid {
+      $width: 100% / $i;
+      .g-md-block-grid-#{$i}{
+        @include block-grid();
+        .g-col{
+          width: $width;
+          flex-basis: auto;
+        }
+      }
+    }
+  }
+}
+
+// Small Breakpoint
+@media screen and (max-width: $small-breakpoint){
+  @for $i from 1 through $max-block-grid {
+    $width: 100% / $i;
+    .g-sm-block-grid-#{$i}{
+      @include block-grid();
+      .g-col{
+        flex-basis: $width;
+      }
+    }
+  }
+
+  // IE 10/11 Work Around
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    @for $i from 1 through $max-block-grid {
+      $width: 100% / $i;
+      .g-sm-block-grid-#{$i}{
+        @include block-grid();
+        .g-col{
+          width: $width;
+          flex-basis: auto;
+        }
+      }
+    }
+  }
+}
+
+// Columns
+
+// Base column styles
+*[class*="g-col-"], *[class*="g-sm-col-"],  *[class*="g-md-col-"], *[class*="flex-basis-"], .col{
+  flex: 0 1 $flex-basis;
+  position: relative;
+  box-sizing: border-box;
+  padding-left: $col-padding;
+  padding-right: $col-padding;
+  min-width: 0;
+}
+
+
+// standard column sizing
+@for $i from 1 through 12 {
+    $flex-basis: 8.333333% * $i;
+    .g-col-#{$i} {
+        flex-basis: $flex-basis;
+    }
+}
+
+
+// column sizing for IE10/11
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  @for $i from 1 through 12 {
+    $width: 8.333333% * $i;
+    .g-col-#{$i} {
+        width: $width;
+        flex-basis: auto;
+    }
+  }
+}
+
+// Col Grow Option
+.g-col-grow{
+  flex: 1 1 $flex-basis;
+}
+
+.g-col-no-pad{
+  padding-left: 0;
+  padding-right: 0;
+}
+
+// Medium Breakpoint Adjustments
+@media screen and (max-width: $medium-breakpoint){
+
+  // Medium columns (.md-col-6, etc.)
+  @for $i from 1 through 12 {
+    $flex-basis: 8.333333% * $i;
+    .g-md-col-#{$i} {
+        flex-basis: $flex-basis;
+    }
+  }
+}
+
+// Medium Breakpoint Adjustments for IE10/11
+@media screen and (max-width: $medium-breakpoint) and (-ms-high-contrast: none), (-ms-high-contrast: active){
+  @for $i from 1 through 12 {
+    $width: 8.333333% * $i;
+    .g-md-col-#{$i} {
+      width: $width;
+      flex-basis: auto;
+    }
+  }
+}
+
+
+// Small Breakpoint Adjustments
+@media screen and (max-width: $small-breakpoint){
+
+  // default columns go full width
+  *[class*="g-col-"]{
+    flex: 1 1 $flex-basis;
+    flex-basis: 100%;
+  }
+
+  // small columns (.sm-col-6, etc.)
+  @for $i from 1 through 12 {
+    $flex-basis: 8.333333% * $i;
+    .g-sm-col-#{$i} {
+        flex-basis: $flex-basis;
+        flex-grow: 0;
+    }
+  }
+}
+
+// Small Breakpoint Adjustments for IE10/11
+@media screen and (max-width: $small-breakpoint) and (-ms-high-contrast: none), (-ms-high-contrast: active){
+  @for $i from 1 through 12 {
+    $width: 8.333333% * $i;
+    .g-sm-col-#{$i} {
+      width: $width;
+      flex-basis: auto;
+    }
+  }
+}
+
+// Container
+$flex-wrap       : nowrap     !default;
+$flex-direction  : column     !default;
+$justify-content : flex-start !default;
+$align-items     : center     !default;
+$align-content   : flex-start !default;
+
+.g-container {
+  position        : relative;
+  width           : 100%;
+  max-width       : $container-max-width;
+  display         : flex;
+  flex-wrap       : $flex-wrap;
+  flex-direction  : $flex-direction;
+  justify-content : $justify-content;
+  align-items     : $align-items;
+  align-content   : $align-content;
+  margin          : 0 auto;
+
+  &--wrap {
+    flex-wrap : wrap;
+  }
+
+  &--direction-row {
+    flex-direction : row;
+  }
+
+  // justify classes
+  &--justify-content-center {
+    justify-content : center;
+  }
+
+  &--justify-content-end {
+    justify-content : flex-end;
+  }
+
+  &--justify-content-space-between {
+    justify-content: space-between;
+  }
+
+  &--justify-content-space-around {
+    justify-content : space-around;
+  }
+
+  // align classes
+  &--align-items-start {
+    align-items : flex-start;
+  }
+
+  &--align-items-end {
+    align-items : flex-end;
+  }
+
+  &--align-items-baseline {
+    align-items : baseline;
+  }
+
+  &--align-items-stretch {
+    align-items : stretch;
+  }
+
+  &--align-content-center {
+    align-content : center;
+  }
+
+  &--align-content-end {
+    align-content : flex-end;
+  }
+
+  &--align-content-space-between {
+    align-content : space-between;
+  }
+
+  &--align-content-space-around {
+    align-content : space-around;
+  }
+
+  &--align-content-stretch {
+    align-content : stretch;
+  }
+
+}
+
+// Extras!
+// extra classes that can help the layout of a page
+
+// Text Alignments
+.text-left{
+  text-align: left;
+}
+.text-center{
+  text-align: center;
+}
+.text-right{
+  text-align: right;
+}
+
+// Center A Column
+.g-col-centered{
+  margin: 0 auto;
+}
+
+// Column Pushed Right
+.g-col-right{
+  margin: 0 0 0 auto;
+}
+
+// Allow a Column to Stretch to its siblings
+.g-stretch{
+  align-self: stretch;
+}
+
+@media screen and (max-width: $medium-breakpoint){
+
+  // text classes
+  .md-text-left{
+    text-align: left;
+  }
+  .md-text-center{
+    text-align: center;
+  }
+  .md-text-right{
+    text-align: right;
+  }
+
+  // column centering
+  .g-md-col-center{
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: $small-breakpoint){
+
+  // text classes
+  .sm-text-left{
+    text-align: left;
+  }
+  .sm-text-center{
+    text-align: center;
+  }
+  .sm-text-right{
+    text-align: right;
+  }
+
+  // column centering
+  .sm-col-center, .sm-col-centered{
+    margin: 0 auto;
+  }
+}
+
+// Row
+$row-flex-wrap       : wrap !default;
+$row-flex-direction  : row !default;
+$row-justify-content : space-between !default;
+$row-align-items     : flex-start !default;
+$row-align-content   : flex-start !default;
+
+.g-row{
+  flex            : 0 1 $flex-basis;
+  width           : 100%;
+  max-width       : $row-max-width;
+  position        : relative;
+  display         : flex;
+  flex-wrap       : $row-flex-wrap;
+  flex-direction  : $row-flex-direction;
+  justify-content : $row-justify-content;
+  align-items     : $row-align-items;
+  align-content   : $row-align-content;
+
+  &--full-width{
+    max-width: 100%;
+  }
+
+  &--no-wrap {
+    flex-wrap : nowrap;
+  }
+
+  &--reverse {
+    flex-direction: row-reverse;
+  }
+
+  // justify classes
+  &--justify-content-center {
+    justify-content : center;
+  }
+
+  &--justify-content-start {
+    justify-content : flex-start;
+  }
+
+  &--justify-content-end {
+    justify-content : flex-end;
+  }
+
+  &--justify-content-space-around {
+    justify-content : space-around;
+  }
+
+  // align classes
+  &--align-items-start {
+    align-items : flex-start;
+  }
+
+  &--align-items-center {
+    align-items : center;
+  }
+
+  &--align-items-end {
+    align-items : flex-end;
+  }
+
+  &--align-items-baseline {
+    align-items : baseline;
+  }
+
+  &--align-items-stretch {
+    align-items : stretch;
+  }
+
+  &--align-content-center {
+    align-content : center;
+  }
+
+  &--align-content-end {
+    align-content : flex-end;
+  }
+
+  &--align-content-space-between {
+    align-content : space-between;
+  }
+
+  &--align-content-space-around {
+    align-content : space-around;
+  }
+
+  &--align-content-stretch {
+    align-content : stretch;
+  }
+}
+
+// Adjust margins for nested rows
+.g-row{
+  .g-row{
+    margin-left: -$col-padding;
+    margin-right: -$col-padding;
+    width: auto;
+  }
+}
+
+// Visibility Classes
+
+.g-hide{
+  display: none !important;
+}
+
+.g-sm-only{
+  display: none !important;
+}
+
+.g-md-only{
+  display: none !important;
+}
+
+.g-lg-only{
+  display: flex !important;
+  &--block{
+    display: block !important;
+  }
+  &--inline-block{
+    display: inline-block !important;
+  }
+  &--inline-flex{
+    display: inline-flex !important;
+  }
+}
+
+// Medium Viewport
+@media screen and (min-width: $small-breakpoint) and (max-width: $medium-breakpoint){
+  // display classes
+  .g-sm-only{
+    display: none !important;
+  }
+
+  .g-md-only{
+    display: flex !important;
+    &--block{
+      display: block !important;
+    }
+    &--inline-block{
+      display: inline-block !important;
+    }
+    &--inline-flex{
+      display: inline-flex !important;
+    }
+  }
+
+  .g-lg-only{
+    display: none !important;
+  }
+
+  .g-md-hide{
+    display: none !important;
+  }
+
+  .g-md-hide-down{
+    display: none !important
+  }
+}
+
+// Small Viewport
+@media screen and (max-width: $small-breakpoint){
+  // display classes
+  .g-sm-only{
+    display: flex !important;
+    &--block{
+      display: block !important;
+    }
+    &--inline-block{
+      display: inline-block !important;
+    }
+    &--inline-flex{
+      display: inline-flex !important;
+    }
+  }
+
+  .g-md-only{
+    display: none !important;
+  }
+
+  .g-md-hide-down{
+    display: none !important
+  }
+
+  .g-lg-only{
+    display: none !important;
+  }
+
+  .g-sm-hide{
+    display: none !important;
+  }
+}
